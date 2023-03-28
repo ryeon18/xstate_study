@@ -1,38 +1,68 @@
-.App {
-  text-align: center;
+.wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.wrap.data-fatch {
+  height: 100%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.traffic-light {
+  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+.light {
+  width: 64px;
+  height: 64px;
+  border-radius: 100%;
+  margin-bottom: 10px;
+  opacity: 0.3;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.yellow {
+  background-color: yellow;
+}
+
+.green {
+  background-color: greenyellow;
+}
+
+.red {
+  background-color: red;
+}
+
+input {
+  appearance: none;
+}
+
+input:checked {
+  opacity: 1;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover,
+button:hover {
+  cursor: pointer;
+}
+
+.back {
+  margin-top: 20px;
+}
+
+.countTitle {
+  text-align: center;
+}
+.countBtn {
+  margin: 10px;
 }
