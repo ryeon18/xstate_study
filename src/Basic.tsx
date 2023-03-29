@@ -12,7 +12,7 @@ export const Basic = () => {
   return (
     <div className="wrap">
       <div className="count">
-        <h2 className="countTitle">Count: {states.context.count}</h2>
+        <h2 className="countTitle">⏱ Count: {states.context.count}</h2>
         <button onClick={() => send("INCREMENT")} className="countBtn">
           Increment
         </button>

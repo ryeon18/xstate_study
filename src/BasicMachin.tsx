@@ -6,24 +6,6 @@ interface Context {
 
 type Event = { type: "INCREMENT" } | { type: "DECREMENT" };
 
-export const checkCondition = (context: Context, event: Event): boolean => {
-  console.log(context, event);
-  if (event.type === "INCREMENT") {
-    if (context.count > 10) {
-      alert("10보다 클 수 없습니다.");
-      return false;
-    } else {
-      return true;
-    }
-  } else {
-    if (context.count < 0) {
-      alert("0보다 작을 수 없습니다.");
-      return false;
-    } else {
-      return true;
-    }
-  }
-};
 export const CounterMachine = createMachine<Context, Event>({
   schema: {
     context: {} as Context,
@@ -43,15 +25,15 @@ export const CounterMachine = createMachine<Context, Event>({
       actions: assign({
         count: (context) => context.count + 1,
       }),
-      // cond: (context) => context.count < 10,
-      cond: (context, event) => checkCondition(context, event),
+      cond: (context) => context.count < 10,
+      // cond: (context, event) => checkCondition(context, event),
     },
     DECREMENT: {
       actions: assign({
         count: (context) => context.count - 1,
       }),
-      // cond: (context) => context.count > 0,
-      cond: (context, event) => checkCondition(context, event),
+      cond: (context) => context.count > 0,
+      // cond: (context, event) => checkCondition(context, event),
     },
   },
   // on 속성을 활용하여 이벤트 설정

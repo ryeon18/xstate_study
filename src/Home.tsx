@@ -6,20 +6,20 @@ export function Home() {
     <div className="wrap">
       <h1>Xstate Study</h1>
       <nav>
-        <ol>
-          <li>
-            <Link to="/basic">basic</Link>
+        <ul>
+          <li className="main-list">
+            <Link to="/basic">1. basic</Link>
           </li>
-          <li>
-            <Link to="/traffic">traffic</Link>
+          <li className="main-list">
+            <Link to="/traffic">2. traffic</Link>
           </li>
-          <li>
-            <Link to="/player">Player</Link>
+          <li className="main-list">
+            <Link to="/player">3. Player</Link>
           </li>
-          <li>
-            <Link to="/fetch-data">DataFetch</Link>
+          <li className="main-list">
+            <Link to="/fetch-data">4. DataFetch</Link>
           </li>
-        </ol>
+        </ul>
       </nav>
     </div>
   );

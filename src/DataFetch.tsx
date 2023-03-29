@@ -20,13 +20,12 @@ export const ShowData = () => {
   const Machine = useMemo(() => fetchMachine, []);
   const [state, send] = useMachine(Machine);
 
-  console.log("state", state.context.data);
-
   return (
     <div className="wrap data-fatch">
       <h2>Fetch Data</h2>
-      <button onClick={() => send("FETCH")}>Fetch</button>
-      <button onClick={() => send("CANCEL")}>Cancel</button>
+      <button onClick={() => send("FETCH")} className="fetch">
+        Fetch
+      </button>
       <Link to="/" className="back">
         Go back
       </Link>

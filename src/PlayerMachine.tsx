@@ -32,7 +32,7 @@ export const PlayerMachine = createMachine<PlayerState, PlayerEvent>({
             STOP: "stopped",
           },
           after: {
-            5000: "stopped",
+            10000: "stopped",
           },
         },
         paused: {
@@ -46,23 +46,29 @@ export const PlayerMachine = createMachine<PlayerState, PlayerEvent>({
             PLAY: "playing",
             PAUSE: "paused",
           },
+          after: {
+            5000: "playing",
+          },
         },
       },
     },
     volume: {
-      initial: "normal",
+      initial: "muted",
       states: {
-        normal: {
-          on: {
-            MUTE: "muted",
-          },
-          after: {
-            1000: "muted",
-          },
-        },
         muted: {
           on: {
-            UNMUTE: "normal",
+            MUTE: "normal",
+          },
+          after: {
+            5000: "normal",
+          },
+        },
+        normal: {
+          on: {
+            UNMUTE: "muted",
+          },
+          after: {
+            5000: "muted",
           },
         },
       },

@@ -6,6 +6,24 @@
   height: 100vh;
 }
 
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+h2 {
+  font-size: 40px;
+}
+
+a {
+  color: black;
+}
+
+.main-list {
+  padding: 10px;
+  font-size: 16px;
+}
+
 .wrap.data-fatch {
   height: 100%;
 }
@@ -56,8 +74,39 @@ button:hover {
   cursor: pointer;
 }
 
+.traffic-btn {
+  margin: 10px;
+  padding: 5px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 20px;
+  opacity: 0.9;
+  transition: all 0.8s;
+}
+
+.traffic-btn:hover {
+  background-color: violet;
+  font-size: 25px;
+  color: white;
+  opacity: 1;
+}
+
 .back {
-  margin-top: 20px;
+  margin: 20px;
+  padding: 10px;
+  transition: all 1s;
+}
+
+.back:hover {
+  color: violet;
+  font-weight: 700;
+  font-size: 20px;
+  opacity: 1;
+}
+
+.back::after {
+  content: " ←";
 }
 
 .countTitle {
@@ -65,4 +114,56 @@ button:hover {
 }
 .countBtn {
   margin: 10px;
+  margin: 10px;
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 20px;
+  transition: all 1s;
+}
+
+.countBtn:hover {
+  background-color: violet;
+  font-size: 30px;
+}
+
+.button-list {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.play-button {
+  margin: 20px;
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 20px;
+  transition: all 0.5s;
+}
+
+.play-button:hover {
+  font-size: 30px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.fetch {
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 20px;
+  transition: all 0.5s;
+}
+
+.fetch:hover {
+  font-size: 30px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.fetch::after {
+  content: " 😀";
 }

@@ -16,9 +16,19 @@ export const Traffic = () => {
   // 생성 후에는 머신 객체가 수정되서는 안된다.
   const [current, send] = useMachine(Machine);
 
-  console.log("current", current);
+  const handleClick = (action: string) => () => {
+    if (action === "NEXT") {
+      send("NEXT");
+    } else if (action === "TURN_ON") {
+      send("TURN_ON");
+    } else if (action === "TURN_OFF") {
+      send("TURN_OFF");
+    } else return;
+  };
+
   return (
     <div className="wrap">
+      <h2>💡 TrafficLight</h2>
       <div className="traffic-light">
         <input
           type="radio"
@@ -38,9 +48,15 @@ export const Traffic = () => {
           className="light green"
           checked={current.matches({ ON: "green" })}
         />
-        <button onClick={() => send("NEXT")}>Next</button>
-        <button onClick={() => send("TURN_ON")}>TURN_ON</button>
-        <button onClick={() => send("TURN_OFF")}>TURN_OFF</button>
+        <button onClick={handleClick("TURN_ON")} className="traffic-btn">
+          TURN_ON
+        </button>
+        <button onClick={handleClick("NEXT")} className="traffic-btn">
+          Next
+        </button>
+        <button onClick={handleClick("TURN_OFF")} className="traffic-btn">
+          TURN_OFF
+        </button>
       </div>
       <Link to="/" className="back">
         Go back
