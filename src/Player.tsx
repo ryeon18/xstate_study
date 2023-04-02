@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import { PlayerMachine, PlayerState } from "./PlayerMachine";
 import { useMachine } from "@xstate/react";
 import { Link } from "react-router-dom";
-import { StateValue } from "xstate";
 import ReactPlayer from "react-player";
 
 export const Player = () => {
