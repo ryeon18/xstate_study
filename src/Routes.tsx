@@ -6,6 +6,7 @@ import { Home } from "./Home";
 import { Player } from "./Player";
 import { ShowData } from "./DataFetch";
 import { Traffic } from "./Traffic";
+import { ConvertRedux } from "./ConvertRedux";
 
 export function Switchs() {
   return (
@@ -16,6 +17,8 @@ export function Switchs() {
         <Route path="/traffic" element={<Traffic />} />
         <Route path="/player" element={<Player />} />
         <Route path="/fetch-data" element={<ShowData />} />
+        <Route path="/Convert" element={<ConvertRedux />} />
+
       </Routes>
     </Router>
   );

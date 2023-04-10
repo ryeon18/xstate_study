@@ -19,6 +19,9 @@ export function Home() {
           <li className="main-list">
             <Link to="/fetch-data">4. DataFetch</Link>
           </li>
+          <li className="main-list">
+            <Link to="/convert">5. ConvertRedux</Link>
+          </li>
         </ul>
       </nav>
     </div>
