@@ -77,6 +77,7 @@ export const ConvertRedux = () => {
       <button onClick={()=>send({type:"SELECT_STORY", value: "5F"})}>
       SELECT_STORY 5F
       </button>
+      <h2>SELECT_PART</h2>
       {PART.map((part) => (
             <Fragment key={part.id}>
             <input type="checkbox" name="select_part" checked={statesVale.leftMenu.propertyMenu.selectedPart[part.name] || false} onChange={handleChange} value={part.name}/> 
@@ -85,9 +86,12 @@ export const ConvertRedux = () => {
             )
         )}
 
-      <button onClick={()=>send({type:"SELECT_STORY", value: "5F"})}>
-      SELECT_STORY 5F
-      </button>
+    <h2>RightMenu Status</h2>
+      <button onClick={()=>send("OPEN_VIEWER_OPTION")}>RightMenu</button>
+
+      {statesVale.rightMenu.viewerOption && <h2>Viewer Option</h2>}
+
+      <h2>RESET ALL</h2>
       <button onClick={()=>send("RESET_PROPERTY")}>
       reset
       </button>

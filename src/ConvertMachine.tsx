@@ -365,6 +365,7 @@ export const ConvertMachine = createMachine<State, Events>({
     },
 
     rightMenu: {
+        type: "parallel",
       states: {
         viewerOption: {
             on:{
@@ -378,32 +379,33 @@ export const ConvertMachine = createMachine<State, Events>({
       },
     },
 
-    resultWindow: {
-      states: {
-        open: {
-            on:{
-                OPEN_RESULT:{
-                    actions:(context, event) => {
-                        context.resultWindow.open = event.value;
-                    }
-                },
-            }
-        },
-      },
-    },
-
-    // viewerOption: {
+    // resultWindow: {
     //   states: {
-    //     showDrawing: {},
-    //     showWireFrame: {},
-    //     showName: {},
-    //     showAreaSize: {},
-    //     showBottom: {},
-    //     showWall: {},
-    //     showCeil: {},
-    //     showMeasurementUnit: {},
+    //     open: {
+    //         on:{
+    //             OPEN_RESULT:{
+    //                 actions:(context, event) => {
+    //                     context.resultWindow.open = event.value;
+    //                 }
+    //             },
+    //         }
+    //     },
     //   },
     // },
+
+    viewerOption: {
+    type: "parallel",
+      states: {
+        showDrawing: {},
+        showWireFrame: {},
+        showName: {},
+        showAreaSize: {},
+        showBottom: {},
+        showWall: {},
+        showCeil: {},
+        showMeasurementUnit: {},
+      },
+    },
   },
   on:{
     RESET_PROPERTY: {
@@ -420,6 +422,79 @@ export const ConvertMachine = createMachine<State, Events>({
             context.viewerOption[event.value] = !context.viewerOption[event.value];
         }
     },
+    OPEN_RESULT:{
+        actions:(context, event) => {
+            context.resultWindow.open = event.value;
+        }
+    },
+    // OPEN_VIEWER_OPTION:{
+    //     actions:(context) => {
+    //         context.rightMenu.viewerOption = !context.rightMenu.viewerOption;
+    //     }
+    // },
+    // SELECT_MATERIAL:{
+    //     actions:(context,event)=>{
+    //         const updateState = checkboxController(
+    //             context.leftMenu.propertyMenu.selectedMaterial,
+    //             event.value.check,
+    //             event.value.totalLength,
+    //           );
+    //           context.leftMenu.propertyMenu.selectedMaterial = updateState;
+    //           context.resultWindow.open = openResultWindowController(context.leftMenu);
+    //     }
+    // },
+    // SELECT_PART:{
+    //     actions:(context,event)=>{
+    //         const updateState = checkboxController(
+    //             context.leftMenu.propertyMenu.selectedPart,
+    //             event.value.check,
+    //             event.value.totalLength,
+    //           );
+    //           context.leftMenu.propertyMenu.selectedPart = updateState;
+    //           context.resultWindow.open = openResultWindowController(context.leftMenu);
+    //     }
+    // },
+    // SELECT_SPACE:{
+    //     actions:(context,event)=>{
+    //         const updateState = checkboxController(
+    //             context.leftMenu.propertyMenu.selectedSpace,
+    //             event.value.check,
+    //             event.value.totalLength,
+    //           );
+    //           context.leftMenu.propertyMenu.selectedPart = updateState;
+    //           context.resultWindow.open = openResultWindowController(context.leftMenu);
+    //     }
+    // },
+    // SELECT_STORY:{
+    //     actions:(context,event)=>{
+    //         console.log('contetx',context)
+    //         context.leftMenu.propertyMenu.selectedStory = event.value;
+    //         context.resultWindow.open = openResultWindowController(context.leftMenu);
+    //         context.drawing2D.selectedStory = event.value || "1F";
+    //     }
+    // },
+    // SELECT_PROPERTY_MENU: {
+    //     actions: (context, event) => {
+    //         if (
+    //         context.leftMenu.propertyMenu.active === event.value
+    //         ) {
+    //         context.leftMenu.propertyMenu.active =
+    //             PropertyMenu.none;
+    //         } else {
+    //         context.leftMenu.propertyMenu.active = event.value;
+    //         }
+    //     },
+    // },
+    // SELECT_LEFT_MENU: {
+    //     actions: (context, event) => {
+    //       if (context.leftMenu.active === event.value) {
+    //         context.leftMenu.active = LeftMenuXstate.none;
+    //       } else {
+    //         context.leftMenu.active = event.value;
+    //       }
+    //       context.resultWindow.open = openResultWindowController(context.leftMenu);
+    //     },
+    //   },
 },
 });
 
