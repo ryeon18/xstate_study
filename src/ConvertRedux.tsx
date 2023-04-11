@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
+import React, { Fragment, useMemo } from "react";
 import "./App.css";
 import { useMachine } from "@xstate/react";
 import { Link } from "react-router-dom";
-import { ConvertMachine, LeftMenuXstate,State } from "./ConvertMachine";
+import { ConvertMachine, LeftMenuXstate,State, PropertyMenu } from "./ConvertMachine";
 
 export const ConvertRedux = () => {
   const Machine = useMemo(() => ConvertMachine, []);
@@ -19,23 +19,77 @@ export const ConvertRedux = () => {
 
   const statesVale = state.context as unknown as State;
 
+  console.log('statesVale', statesVale)
+
+  const handleLeftMenu = (value: LeftMenuXstate) => {
+    if(LeftMenuXstate.property === value){
+        send({ type: "SELECT_LEFT_MENU", value: LeftMenuXstate.property })
+    } else if(LeftMenuXstate.none === value){
+        send({ type: "SELECT_LEFT_MENU", value: LeftMenuXstate.none })
+    } else if(LeftMenuXstate.measure === value){
+        send({ type: "SELECT_LEFT_MENU", value: LeftMenuXstate.measure })
+    } else if(LeftMenuXstate.material === value){
+        send({ type: "SELECT_LEFT_MENU", value: LeftMenuXstate.material })
+    } else if(LeftMenuXstate.screenShot === value){
+        send({ type: "SELECT_LEFT_MENU", value: LeftMenuXstate.screenShot })
+    } else return;
+  }
+
+  const handlePropertyMenu = (value: PropertyMenu) => {
+    if(PropertyMenu.none === value){
+        send({ type: "SELECT_PROPERTY_MENU", value: PropertyMenu.none })
+    } else if(PropertyMenu.byStory === value){
+        send({ type: "SELECT_PROPERTY_MENU", value: PropertyMenu.byStory })
+    } else if(PropertyMenu.bySpace === value){
+        send({ type: "SELECT_PROPERTY_MENU", value: PropertyMenu.bySpace })
+    } else if(PropertyMenu.byPart === value){
+        send({ type: "SELECT_PROPERTY_MENU", value: PropertyMenu.byPart })
+    } else if(PropertyMenu.byMaterial === value){
+        send({ type: "SELECT_PROPERTY_MENU", value: PropertyMenu.byMaterial })
+    } else return;
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    send({type:"SELECT_PART", value:{ check: { [event.target.value]: event.target.checked },
+    totalLength: PART.length}})
+  };
 
   return (
-    <div className="wrap">
+    <div className="wrap convert">
       <h2>💡 LeftMenuActive Status: {statesVale.leftMenu.active}</h2>
-      <button
-        onClick={() =>
-          send({ type: "SELECT_LEFT_MENU", value: LeftMenuXstate.property })
-        }
-      >
-        Toggle
+      <button onClick={()=>handleLeftMenu(LeftMenuXstate.property)}>
+      leftMenu
       </button>
-      <button
-        onClick={() =>
-          send({ type: "SELECT_LEFT_MENU", value: LeftMenuXstate.none })
-        }
-      >
-        Toggle
+      <button onClick={()=>handleLeftMenu(LeftMenuXstate.measure)}>
+      measure
+      </button>
+      <h2>💡 PROPERTY Status: {statesVale.leftMenu.propertyMenu.active}</h2>
+      <button onClick={()=>handlePropertyMenu(PropertyMenu.byStory)}>
+      property
+      </button>
+      <button onClick={()=>handlePropertyMenu(PropertyMenu.byPart)}>
+      byPart
+      </button>
+      <h2>💡 selectedStory Status: {statesVale.leftMenu.propertyMenu.selectedStory}</h2>
+      <button onClick={()=>send({type:"SELECT_STORY", value: "2F"})}>
+      SELECT_STORY 2F
+      </button>
+      <button onClick={()=>send({type:"SELECT_STORY", value: "5F"})}>
+      SELECT_STORY 5F
+      </button>
+      {PART.map((part) => (
+            <Fragment key={part.id}>
+            <input type="checkbox" name="select_part" checked={statesVale.leftMenu.propertyMenu.selectedPart[part.name] || false} onChange={handleChange} value={part.name}/> 
+            <label>{part.name}</label>
+            </Fragment>        
+            )
+        )}
+
+      <button onClick={()=>send({type:"SELECT_STORY", value: "5F"})}>
+      SELECT_STORY 5F
+      </button>
+      <button onClick={()=>send("RESET_PROPERTY")}>
+      reset
       </button>
       <Link to="/" className="back">
         Go back
@@ -43,3 +97,8 @@ export const ConvertRedux = () => {
     </div>
   );
 };
+
+const PART = [
+    {id:1, name:"보",},
+    {id:2, name:"매트슬래브"},
+]

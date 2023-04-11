@@ -1,4 +1,6 @@
 import { createMachine, assign, send, actions } from "xstate";
+import { compact } from "lodash";
+
 
 const { log } = actions;
 
@@ -72,31 +74,38 @@ export type Events =
     }
   | {
       type: "SELECT_SPACE";
-      value: string;
+      value: {
+        check: { [key: string]: boolean };
+        totalLength: number;
+      };
     }
   | {
       type: "SELECT_PART";
-      value: string;
+      value: {
+        check: { [key: string]: boolean };
+        totalLength: number;
+      };
     }
   | {
       type: "SELECT_MATERIAL";
-      value: string;
+      value: {
+        check: { [key: string]: boolean };
+        totalLength: number;
+      };
     }
   | {
       type: "RESET_PROPERTY";
-      value: ViewerOption;
     }
   | {
       type: "OPEN_RESULT";
-      value: string;
+      value: boolean;
     }
   | {
       type: "OPEN_VIEWER_OPTION";
-      value: string;
     }
   | {
       type: "SET_VIEWER_OPTION";
-      value: string;
+      value: ViewerOption;
     };
 
 export const ConvertMachine = createMachine<State, Events>({
@@ -110,33 +119,32 @@ export const ConvertMachine = createMachine<State, Events>({
       propertyMenu: {
         active: PropertyMenu.none,
         selectedStory: null,
-        selectedSpace: {},
-        selectedPart: {},
-        selectedMaterial: {},
+        selectedSpace: { all: true },
+        selectedPart: { all: true },
+        selectedMaterial: { all: true },
       },
     },
     rightMenu: {
-      viewerOption: false,
+        viewerOption: false,
     },
     resultWindow: {
       open: false,
     },
     drawing2D: {
-      selectedStory: "",
-      selectedVdsUrl: null,
+        selectedStory: "1F",
+        selectedVdsUrl: null,
     },
     viewerOption: {
-      showDrawing: true,
-      showWireFrame: false,
-      showName: false,
-      showAreaSize: false,
-      showBottom: false,
-      showWall: false,
-      showCeil: false,
-      showMeasurementUnit: false,
+        showDrawing: true,
+        showWireFrame: false,
+        showName: false,
+        showAreaSize: false,
+        showBottom: true,
+        showWall: true,
+        showCeil: false,
+        showMeasurementUnit: false,
     },
   },
-
   states: {
     leftMenu: {
       type: "parallel",
@@ -144,21 +152,19 @@ export const ConvertMachine = createMachine<State, Events>({
         active: {
           initial: LeftMenuXstate.none,
           states: {
-            // on: {
-            //     SELECT_LEFT_MENU: {
-            //       actions: (context, event) => {
-            //         context.leftMenu.active = event.value;
-            //       },
-            //     },
-            //   },
             none: {
               on: {
                 SELECT_LEFT_MENU: {
                     actions: (context, event) => {
-                        console.log('event.value: ', event.value)
+                      if (context.leftMenu.active === event.value) {
+                        context.leftMenu.active = LeftMenuXstate.none;
+                      } else {
                         context.leftMenu.active = event.value;
-                        }
-                }
+                      }
+                      context.resultWindow.open = openResultWindowController(context.leftMenu);
+                    },
+                  },
+                  
               },
             },
 
@@ -166,12 +172,12 @@ export const ConvertMachine = createMachine<State, Events>({
               on: {
                 SELECT_LEFT_MENU: {
                   actions: (context, event) => {
-                    console.log("clekc...");
                     if (context.leftMenu.active === event.value) {
                       context.leftMenu.active = LeftMenuXstate.none;
                     } else {
                       context.leftMenu.active = event.value;
                     }
+                    context.resultWindow.open = openResultWindowController(context.leftMenu);
                   },
                 },
               },
@@ -181,7 +187,12 @@ export const ConvertMachine = createMachine<State, Events>({
               on: {
                 SELECT_LEFT_MENU: {
                   actions: (context, event) => {
-                    context.leftMenu.active = event.value;
+                    if (context.leftMenu.active === event.value) {
+                      context.leftMenu.active = LeftMenuXstate.none;
+                    } else {
+                      context.leftMenu.active = event.value;
+                    }
+                    context.resultWindow.open = openResultWindowController(context.leftMenu);
                   },
                 },
               },
@@ -191,7 +202,12 @@ export const ConvertMachine = createMachine<State, Events>({
               on: {
                 SELECT_LEFT_MENU: {
                   actions: (context, event) => {
-                    context.leftMenu.active = event.value;
+                    if (context.leftMenu.active === event.value) {
+                      context.leftMenu.active = LeftMenuXstate.none;
+                    } else {
+                      context.leftMenu.active = event.value;
+                    }
+                    context.resultWindow.open = openResultWindowController(context.leftMenu);
                   },
                 },
               },
@@ -201,7 +217,12 @@ export const ConvertMachine = createMachine<State, Events>({
               on: {
                 SELECT_LEFT_MENU: {
                   actions: (context, event) => {
-                    context.leftMenu.active = event.value;
+                    if (context.leftMenu.active === event.value) {
+                      context.leftMenu.active = LeftMenuXstate.none;
+                    } else {
+                      context.leftMenu.active = event.value;
+                    }
+                    context.resultWindow.open = openResultWindowController(context.leftMenu);
                   },
                 },
               },
@@ -209,36 +230,167 @@ export const ConvertMachine = createMachine<State, Events>({
           },
         },
 
-        // propertyMenu: {
-        //   states: {
-        //     active: {},
-        //     selectedStory: {},
-        //     selectedSpace: {},
-        //     selectedPart: {},
-        //     selectedMaterial: {},
-        //   },
-        // },
+        propertyMenu: {
+            type: "parallel",
+            states: {
+                active: {
+                    initial: PropertyMenu.none,
+                    states: {
+                        none: {
+                            on: {
+                                SELECT_PROPERTY_MENU: {
+                                    actions: (context, event) => {
+                                        if (
+                                        context.leftMenu.propertyMenu.active === event.value
+                                        ) {
+                                        context.leftMenu.propertyMenu.active =
+                                            PropertyMenu.none;
+                                        } else {
+                                        context.leftMenu.propertyMenu.active = event.value;
+                                        }
+                                    },
+                                },
+                            },
+                        },
+                        byStory: {
+                            on: {
+                                SELECT_PROPERTY_MENU: {
+                                    actions: (context, event) => {
+                                        if (
+                                        context.leftMenu.propertyMenu.active === event.value
+                                        ) {
+                                        context.leftMenu.propertyMenu.active =
+                                            PropertyMenu.none;
+                                        } else {
+                                        context.leftMenu.propertyMenu.active = event.value;
+                                        }
+                                    },
+                                },
+                            },
+                        },
+                        bySpace: {
+                            on: {
+                                SELECT_PROPERTY_MENU: {
+                                    actions: (context, event) => {
+                                        if (
+                                        context.leftMenu.propertyMenu.active === event.value
+                                        ) {
+                                        context.leftMenu.propertyMenu.active =
+                                            PropertyMenu.none;
+                                        } else {
+                                        context.leftMenu.propertyMenu.active = event.value;
+                                        }
+                                    },
+                                },
+                            },
+                        },
+                        byPart: {
+                            on:{
+                                SELECT_PROPERTY_MENU: {
+                                    actions: (context, event) => {
+                                        if (
+                                        context.leftMenu.propertyMenu.active === event.value
+                                        ) {
+                                        context.leftMenu.propertyMenu.active =
+                                            PropertyMenu.none;
+                                        } else {
+                                        context.leftMenu.propertyMenu.active = event.value;
+                                        }
+                                    },
+                                }
+                            }
+                        }
+                    },
+                },
+            selectedStory: {
+                on:{
+                    SELECT_STORY:{
+                        actions:(context,event)=>{
+                            console.log('contetx',context)
+                            context.leftMenu.propertyMenu.selectedStory = event.value;
+                            context.resultWindow.open = openResultWindowController(context.leftMenu);
+                            context.drawing2D.selectedStory = event.value || "1F";
+                        }
+                    }
+                }
+            },
+            selectedSpace: {
+                on:{
+                    SELECT_SPACE:{
+                        actions:(context,event)=>{
+                            const updateState = checkboxController(
+                                context.leftMenu.propertyMenu.selectedSpace,
+                                event.value.check,
+                                event.value.totalLength,
+                              );
+                              context.leftMenu.propertyMenu.selectedPart = updateState;
+                              context.resultWindow.open = openResultWindowController(context.leftMenu);
+                        }
+                    }
+                }
+            },
+            selectedPart: {
+                on:{
+                    SELECT_PART:{
+                        actions:(context,event)=>{
+                            const updateState = checkboxController(
+                                context.leftMenu.propertyMenu.selectedPart,
+                                event.value.check,
+                                event.value.totalLength,
+                              );
+                              context.leftMenu.propertyMenu.selectedPart = updateState;
+                              context.resultWindow.open = openResultWindowController(context.leftMenu);
+                        }
+                    }
+                }
+            },
+            selectedMaterial: {
+                on:{
+                    SELECT_MATERIAL:{
+                        actions:(context,event)=>{
+                            const updateState = checkboxController(
+                                context.leftMenu.propertyMenu.selectedMaterial,
+                                event.value.check,
+                                event.value.totalLength,
+                              );
+                              context.leftMenu.propertyMenu.selectedMaterial = updateState;
+                              context.resultWindow.open = openResultWindowController(context.leftMenu);
+                        }
+                    }
+                }
+            },
+          },
+        },
       },
     },
 
-    // rightMenu: {
-    //   states: {
-    //     viewerOption: {},
-    //   },
-    // },
+    rightMenu: {
+      states: {
+        viewerOption: {
+            on:{
+                OPEN_VIEWER_OPTION:{
+                    actions:(context) => {
+                        context.rightMenu.viewerOption = !context.rightMenu.viewerOption;
+                    }
+                },
+            }
+        },
+      },
+    },
 
-    // resultWindow: {
-    //   states: {
-    //     open: {},
-    //   },
-    // },
-
-    // drawing2D: {
-    //   states: {
-    //     selectedStory: {},
-    //     selectedVdsUrl: {},
-    //   },
-    // },
+    resultWindow: {
+      states: {
+        open: {
+            on:{
+                OPEN_RESULT:{
+                    actions:(context, event) => {
+                        context.resultWindow.open = event.value;
+                    }
+                },
+            }
+        },
+      },
+    },
 
     // viewerOption: {
     //   states: {
@@ -253,4 +405,74 @@ export const ConvertMachine = createMachine<State, Events>({
     //   },
     // },
   },
+  on:{
+    RESET_PROPERTY: {
+        actions:(context, event) => {
+            context.leftMenu.propertyMenu.selectedStory = null;
+            context.leftMenu.propertyMenu.selectedSpace = { all: true };
+            context.leftMenu.propertyMenu.selectedPart = { all: true };
+            context.leftMenu.propertyMenu.selectedMaterial = { all: true };
+            context.resultWindow.open = openResultWindowController(context.leftMenu);
+        }
+    },
+    SET_VIEWER_OPTION:{
+        actions:(context, event) => {
+            context.viewerOption[event.value] = !context.viewerOption[event.value];
+        }
+    },
+},
 });
+
+
+function openResultWindowController(state: State["leftMenu"]) {
+    const {
+      propertyMenu: {
+        selectedStory,
+        selectedSpace: { all: spaceAll },
+        selectedPart: { all: partAll },
+        selectedMaterial: { all: materialAll },
+      },
+    } = state;
+    if (!selectedStory && spaceAll && partAll && materialAll) {
+      return false;
+    }
+    return true;
+  }
+  function checkboxController(
+    state: { [key: string]: boolean },
+    payload: { [key: string]: boolean },
+    totalLength: number,
+    // propertyKey: keyof ModelState
+  ) {
+    const [key] = Object.keys(payload);
+    const [value] = Object.values(payload);
+    // 전체 체크하는 경우 전체를 제외한 나머지 항목 false
+    if (key === "all" && value) {
+      state["all"] = true;
+      Object.keys(state).map((item) => {
+        if (item !== "all") {
+          state[item] = false;
+        }
+      });
+    } else {
+      // 전체가 아닌 항목을 체크하는 경우 전체 체크 해제
+      state["all"] = false;
+      state[key] = value;
+    }
+    const checked = compact(
+      Object.entries(state).map((item) => {
+        const [key, value] = item;
+        if (key === "all") return null;
+        return { key, value };
+      }),
+    ).filter((item) => item.value);
+    if (checked.length === totalLength) {
+      state["all"] = true;
+      Object.keys(state).map((item) => {
+        if (item !== "all") {
+         state[item] = false;
+        }
+      });
+    }
+    return state;
+  }
