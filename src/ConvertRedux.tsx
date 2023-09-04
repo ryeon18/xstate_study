@@ -1,8 +1,8 @@
 import React, { Fragment, useMemo } from "react";
 import "./App.css";
-import { useMachine } from "@xstate/react";
+import { useMachine, useSelector } from "@xstate/react";
 import { Link } from "react-router-dom";
-import { ConvertMachine, LeftMenuXstate,State, PropertyMenu } from "./ConvertMachine";
+import { ConvertMachine, LeftMenuXstate,State, PropertyMenu, ViewerOption } from "./ConvertMachine";
 
 export const ConvertRedux = () => {
   const Machine = useMemo(() => ConvertMachine, []);
@@ -54,10 +54,17 @@ export const ConvertRedux = () => {
     totalLength: PART.length}})
   };
 
+  const {open} = statesVale.resultWindow;
+
+  const viewOption = statesVale.viewerOption;
+
+
+  console.log('viewOption', viewOption)
+  
   return (
     <div className="wrap convert">
       <h2>💡 LeftMenuActive Status: {statesVale.leftMenu.active}</h2>
-      <button onClick={()=>handleLeftMenu(LeftMenuXstate.property)}>
+      <button>
       leftMenu
       </button>
       <button onClick={()=>handleLeftMenu(LeftMenuXstate.measure)}>
@@ -80,16 +87,31 @@ export const ConvertRedux = () => {
       <h2>SELECT_PART</h2>
       {PART.map((part) => (
             <Fragment key={part.id}>
-            <input type="checkbox" name="select_part" checked={statesVale.leftMenu.propertyMenu.selectedPart[part.name] || false} onChange={handleChange} value={part.name}/> 
-            <label>{part.name}</label>
+            <label>
+                <input type="checkbox" name="select_part" checked={statesVale.leftMenu.propertyMenu.selectedPart[part.name] || false} onChange={handleChange} value={part.name}/> 
+            {part.name}
+            </label>
             </Fragment>        
             )
         )}
 
-    <h2>RightMenu Status</h2>
+    <h2>rightMenu OPEN VIEWER OPTION</h2>
       <button onClick={()=>send("OPEN_VIEWER_OPTION")}>RightMenu</button>
 
-      {statesVale.rightMenu.viewerOption && <h2>Viewer Option</h2>}
+      {statesVale.rightMenu.viewerOption && 
+        <>
+        <h2>rightMenu Viewer Option</h2>
+        <label><input type="checkbox" checked={viewOption.showWall} onChange={()=>send({type:"SET_VIEWER_OPTION",value:ViewerOption.showWall})}/>벽보여주기</label>
+        <label><input type="checkbox" checked={viewOption.showDrawing}  onChange={()=>send({type:"SET_VIEWER_OPTION",value:ViewerOption.showDrawing})}/>도면보여주기</label>
+        <label><input type="checkbox" checked={viewOption.showCeil}  onChange={()=>send({type:"SET_VIEWER_OPTION",value:ViewerOption.showCeil})}/>천장보여주기</label>
+
+
+        </>
+      }
+
+    <h2>Open result</h2>
+    <button onClick={()=>send({type:"OPEN_RESULT",value:!open})}>Click open result</button>
+    {statesVale.resultWindow.open && <h2>Result window</h2>}
 
       <h2>RESET ALL</h2>
       <button onClick={()=>send("RESET_PROPERTY")}>

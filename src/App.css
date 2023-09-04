@@ -171,3 +171,7 @@ button:hover {
 .wrap.convert input {
   appearance: auto
 }
+
+.wrap.convert{
+  height: 100%;
+}

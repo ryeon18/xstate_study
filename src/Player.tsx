@@ -54,7 +54,7 @@ export const Player = () => {
         width="640px"
         height="360px"
         playing={states.matches({ player: "playing" })}
-        muted={states.matches({ volume: "muted" })}
+        muted={!states.matches({ volume: "muted" })}
         controls={true}
         light={false}
         onReady={handlePlayerReady}
